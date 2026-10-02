@@ -1,0 +1,44 @@
+{
+  "name": "omni-mcp",
+  "version": "0.1.0",
+  "description": "Innovative open-source platform that unifies all Model Context Protocol (MCP) servers and AI tool integrations",
+  "main": "dist/index.js",
+  "type": "module",
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsx watch src/index.ts",
+    "start": "node dist/index.js",
+    "test": "echo \"No tests yet\" && exit 0"
+  },
+  "keywords": [
+    "mcp",
+    "model-context-protocol",
+    "ai",
+    "agents",
+    "tools",
+    "composio",
+    "llm",
+    "anthropic",
+    "openai"
+  ],
+  "author": "zema-tech",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/zema-tech/omni-mcp.git"
+  },
+  "bugs": {
+    "url": "https://github.com/zema-tech/omni-mcp/issues"
+  },
+  "homepage": "https://github.com/zema-tech/omni-mcp#readme",
+  "devDependencies": {
+    "typescript": "^5.0.0",
+    "tsx": "^4.0.0",
+    "@types/node": "^20.0.0"
+  },
+  "dependencies": {
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
