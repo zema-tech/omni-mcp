@@ -1,0 +1,101 @@
+{
+  "$schema": "./schema.json",
+  "version": "0.1.0",
+  "description": "Catalog of apps available through OmniMCP",
+  "apps": [
+    {
+      "id": "slack",
+      "name": "Slack",
+      "category": "communication",
+      "hasOfficialMcp": false,
+      "omniMcpServer": "servers/slack",
+      "status": "planned",
+      "priority": "high",
+      "description": "Send messages, manage channels, search conversations"
+    },
+    {
+      "id": "gmail",
+      "name": "Gmail",
+      "category": "email",
+      "hasOfficialMcp": false,
+      "omniMcpServer": "servers/gmail",
+      "status": "planned",
+      "priority": "high",
+      "description": "Read, send, search and manage emails"
+    },
+    {
+      "id": "notion",
+      "name": "Notion",
+      "category": "productivity",
+      "hasOfficialMcp": false,
+      "omniMcpServer": "servers/notion",
+      "status": "planned",
+      "priority": "high",
+      "description": "Pages, databases, blocks and search"
+    },
+    {
+      "id": "discord",
+      "name": "Discord",
+      "category": "communication",
+      "hasOfficialMcp": false,
+      "status": "planned",
+      "priority": "high",
+      "description": "Messages, servers, channels and moderation"
+    },
+    {
+      "id": "linear",
+      "name": "Linear",
+      "category": "project-management",
+      "hasOfficialMcp": false,
+      "status": "planned",
+      "priority": "medium",
+      "description": "Issues, projects, cycles and comments"
+    },
+    {
+      "id": "stripe",
+      "name": "Stripe",
+      "category": "payments",
+      "hasOfficialMcp": false,
+      "status": "planned",
+      "priority": "medium",
+      "description": "Customers, payments, invoices and subscriptions"
+    },
+    {
+      "id": "telegram",
+      "name": "Telegram",
+      "category": "communication",
+      "hasOfficialMcp": false,
+      "status": "planned",
+      "priority": "medium",
+      "description": "Bots, messages and chats"
+    },
+    {
+      "id": "shopify",
+      "name": "Shopify",
+      "category": "ecommerce",
+      "hasOfficialMcp": false,
+      "status": "planned",
+      "priority": "medium",
+      "description": "Products, orders, customers and inventory"
+    },
+    {
+      "id": "filesystem",
+      "name": "Filesystem",
+      "category": "system",
+      "hasOfficialMcp": true,
+      "officialPackage": "@modelcontextprotocol/server-filesystem",
+      "status": "available",
+      "priority": "high",
+      "description": "Read and write local files"
+    },
+    {
+      "id": "github",
+      "name": "GitHub",
+      "category": "development",
+      "hasOfficialMcp": true,
+      "status": "available",
+      "priority": "high",
+      "description": "Repositories, issues, pull requests and more"
+    }
+  ]
+}
