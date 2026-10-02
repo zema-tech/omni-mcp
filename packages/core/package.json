@@ -1,0 +1,32 @@
+{
+  "name": "@omnimcp/core",
+  "version": "0.1.0",
+  "description": "OmniMCP core — sessions, gateway, tool router and MCP aggregation",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch"
+  },
+  "files": [
+    "dist",
+    "src"
+  ],
+  "keywords": [
+    "mcp",
+    "omnimcp",
+    "composio",
+    "ai-agents"
+  ],
+  "license": "MIT",
+  "engines": {
+    "node": ">=18"
+  }
+}

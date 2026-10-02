@@ -1,177 +1,191 @@
-# OmniMCP 🚀
+# OmniMCP
 
-> **The open-source Composio alternative**  
-> Connect any AI agent to **hundreds of apps** through a unified MCP layer — including apps that still don't have an official MCP server (we build them).
+> **The open-source alternative to Composio**  
+> Give your AI agents access to hundreds of apps through a unified **MCP-native** layer.  
+> We also build high-quality MCP servers for apps that still don't have one.
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![MCP Compatible](https://img.shields.io/badge/MCP-Compatible-blue)](https://modelcontextprotocol.io)
-[![Status](https://img.shields.io/badge/Status-Early%20Development-orange)]()
-
----
-
-## 🎯 Mission
-
-**OmniMCP is a drop-in substitute for Composio**, but built fully on the open **Model Context Protocol** standard and designed to be community-owned.
-
-We do two things better:
-
-1. **Aggregate every existing MCP** (official + community)
-2. **Create high-quality MCP servers** for popular apps that still don't have one
-
-So your AI agent can talk to Gmail, Slack, Notion, Stripe, Shopify, Linear, Discord, Telegram, banking APIs, CRMs… even if those services never published an MCP.
+<p align="center">
+  <a href="https://github.com/zema-tech/omni-mcp"><img alt="GitHub stars" src="https://img.shields.io/github/stars/zema-tech/omni-mcp?style=social" /></a>
+  <a href="https://opensource.org/licenses/MIT"><img alt="License: MIT" src="https://img.shields.io/badge/License-MIT-yellow.svg" /></a>
+  <a href="https://modelcontextprotocol.io"><img alt="MCP" src="https://img.shields.io/badge/MCP-Native-blue" /></a>
+  <a href="#"><img alt="Status" src="https://img.shields.io/badge/Status-Early%20Development-orange" /></a>
+</p>
 
 ---
 
-## 📊 OmniMCP vs Composio
+## Why OmniMCP?
 
-| Feature                        | Composio              | **OmniMCP**                              |
-|--------------------------------|-----------------------|------------------------------------------|
-| Number of apps                 | 1000+                 | Growing catalog + all public MCPs        |
-| Apps without official MCP      | Proprietary wrappers  | **We build open MCP servers for them**   |
-| Protocol                       | Proprietary + MCP     | **100% native MCP**                      |
-| Open source                    | Partial               | **Fully open source**                    |
-| Self-hostable                  | Limited               | **Yes, completely**                      |
-| Tool discovery                 | Catalog               | Semantic search + progressive loading    |
-| Auth                           | Managed               | Pluggable (OAuth, API keys, custom)      |
-| Community contributions        | Restricted            | Anyone can add new MCP servers           |
-| Cost                           | Paid tiers            | Free & open                              |
+Composio is excellent. OmniMCP takes the same idea and makes it:
+
+- **Fully open source** and self-hostable
+- **100% MCP-native** (no proprietary protocol lock-in)
+- **Community-driven**: anyone can add new MCP servers
+- Focused on building MCP servers for apps that **don't have them yet**
+
+| Feature                    | Composio              | OmniMCP                                      |
+|----------------------------|-----------------------|----------------------------------------------|
+| App integrations           | 1000+                 | Growing + all public MCPs                    |
+| Apps without official MCP  | Proprietary wrappers  | **We build open MCP servers**                |
+| Protocol                   | Proprietary + MCP     | **Native MCP first**                         |
+| Sessions per user          | Yes                   | Yes                                          |
+| Meta-tools (discover/auth) | Yes                   | Yes (planned)                                |
+| Provider adapters          | Many frameworks       | OpenAI, Anthropic, LangChain, Vercel…        |
+| Self-hostable              | Limited               | **Fully**                                    |
+| License                    | Proprietary core      | **MIT**                                      |
 
 ---
 
-## 🛠 How it works
+## Quickstart (vision)
 
-```
-AI Agent (Claude / GPT / Grok / local model)
-          │
-          ▼
-   ┌──────────────────────────────────────────────┐
-   │              OmniMCP Gateway                              │
-   │  • Unified tool list                                      │
-   │  • Smart routing                                          │
-   │  • Auth management                                        │
-   │  • Context optimization                                   │
-   └──────────────────────────────────────────────┘
-          │
-    ┌────────────────────────────────────────────────┐
-    │  Official MCPs   │  Community MCPs  │  OmniMCP Custom  │
-    │  (filesystem,    │  (from the web)  │  MCP Servers     │
-    │   github, ...)   │                  │  (we build them) │
-    └────────────────────────────────────────────────┘
+```bash
+npm install @omnimcp/core @omnimcp/openai-agents
+# or
+pip install omnimcp omnimcp-openai-agents
 ```
 
-### The key differentiator: **Custom MCP Servers**
+### TypeScript
 
-Many popular apps still don't expose an official MCP.  
-We (and the community) create clean, well-documented MCP servers for them:
+```typescript
+import { OmniMCP } from "@omnimcp/core";
+import { OpenAIAgentsProvider } from "@omnimcp/openai-agents";
 
-- Slack, Discord, Telegram
-- Gmail / Google Workspace
-- Notion, Airtable, Coda
-- Stripe, PayPal, Shopify
-- Linear, Jira, Asana, Trello
-- HubSpot, Salesforce
-- Twitter/X, LinkedIn
-- Banking & finance APIs
-- And many more…
+const omni = new OmniMCP({
+  provider: new OpenAIAgentsProvider(),
+});
 
-These custom MCPs live in this monorepo under `/servers` and can be used standalone or through the OmniMCP gateway.
+// One session per user (like Composio)
+const session = await omni.create("user_123", {
+  apps: ["gmail", "slack", "notion", "stripe"],
+});
+
+const tools = await session.tools(); // smart loading, no context bloat
+
+// Hand tools to your agent and let it act
+```
+
+### Prefer pure MCP?
+
+Every session can expose a hosted MCP endpoint:
+
+```typescript
+const session = await omni.create("user_123", { mcp: true });
+// Point Claude Desktop / Cursor / any MCP client to session.mcp.url
+```
 
 ---
 
-## 🗂️ Project Structure (planned)
+## Core Concepts (inspired by Composio)
 
+### 1. Sessions
+Each user gets an isolated session. Sessions manage:
+- Connected accounts / auth
+- Which apps/tools are available
+- Tool execution context
+
+### 2. Apps & Toolkits
+- **Official MCPs** — we connect to them
+- **Custom OmniMCP servers** — we build them for apps that lack an MCP (Gmail, Slack, Notion, Stripe, Linear…)
+- **Community MCPs** — discoverable via registry
+
+### 3. Meta Tools
+Instead of dumping hundreds of tools into the context window, sessions expose meta-tools:
+- `search_tools` — find the right tool
+- `authenticate` — connect an account
+- `execute_tool` — run it
+
+### 4. Providers
+Adapters that turn OmniMCP tools into the native format of your agent framework:
+- OpenAI Agents
+- Anthropic / Claude Agent SDK
+- Vercel AI SDK
+- LangChain / LangGraph
+- LlamaIndex
+- etc.
+
+### 5. CLI (planned)
+```bash
+omnimcp search "send email"
+omnimcp link gmail
+omnimcp execute gmail_send_email --to=...
+omnimcp run script.ts
 ```
+
+---
+
+## Repository Layout
+
+```text
 omni-mcp/
 ├── packages/
-│   ├── core/              # OmniMCP gateway & router
-│   ├── sdk-ts/            # TypeScript SDK
-│   └── sdk-python/        # Python SDK
-├── servers/              # Custom MCP servers we build
-│   ├── slack/
+│   ├── core/                 # @omnimcp/core — sessions, gateway, router
+│   ├── providers/            # Framework adapters
+│   │   ├── openai-agents/
+│   │   ├── anthropic/
+│   │   ├── vercel/
+│   │   └── langchain/
+│   └── cli/                  # omnimcp CLI
+├── servers/                  # Custom MCP servers we build
 │   ├── gmail/
+│   ├── slack/
 │   ├── notion/
 │   ├── stripe/
 │   ├── linear/
 │   └── ...
-├── registry/             # Catalog of all known MCPs
+├── registry/                 # Catalog of apps & known MCPs
+├── python/                   # Python SDK (planned)
 ├── docs/
-└── examples/
+├── examples/
+└── scripts/
 ```
 
 ---
 
-## 🚀 Roadmap
+## Roadmap
 
-### Phase 1 — Foundation (Now)
-- [x] Vision & repository
-- [ ] Core gateway that can connect to multiple MCP servers
-- [ ] First custom MCP servers (start with high-demand apps)
-- [ ] Simple registry of available tools
+### Phase 1 — Foundation
+- [x] Vision & monorepo structure
+- [ ] `@omnimcp/core` with sessions
+- [ ] First custom MCP servers (Gmail, Slack, Notion)
+- [ ] Basic tool routing + discovery
 
-### Phase 2 — Real value
-- [ ] 20+ high-quality custom MCP servers
-- [ ] One-click OAuth / API-key auth flows
-- [ ] Semantic tool search (“find tools that can send emails”)
+### Phase 2 — Real power
+- [ ] Meta-tools (search / auth / execute)
+- [ ] OAuth & API-key auth flows
+- [ ] Provider adapters (OpenAI Agents, Anthropic, Vercel AI SDK)
 - [ ] Progressive tool loading (no context explosion)
 
 ### Phase 3 — Ecosystem
+- [ ] Python SDK
+- [ ] CLI
 - [ ] Public registry + marketplace
-- [ ] SDKs for TypeScript, Python, Go
-- [ ] Official adapters for Claude, OpenAI Agents, LangChain, Vercel AI SDK
+- [ ] MCP endpoint per session
 - [ ] Self-hosted control plane
 
 ### Phase 4 — Scale
-- [ ] Community-contributed MCP servers
-- [ ] Auto-generated MCP from OpenAPI specs
-- [ ] Sandboxed execution & triggers
-- [ ] Enterprise features (audit, RBAC, etc.)
+- [ ] Community-contributed servers
+- [ ] Auto-generate MCP from OpenAPI
+- [ ] Triggers & webhooks
+- [ ] Sandboxed execution
 
 ---
 
-## 📝 Getting Started (Coming Soon)
+## Contributing
 
-```bash
-npm install @omnimcp/core
-# or
-pip install omnimcp
-```
+We especially need help with:
 
-```typescript
-import { OmniMCP } from "@omnimcp/core";
+1. **Building new MCP servers** for popular apps
+2. **Core gateway & session logic**
+3. **Provider adapters**
 
-const omni = new OmniMCP({
-  // Mix official MCPs + our custom ones
-  apps: ["gmail", "slack", "notion", "stripe", "linear"],
-  // or connect any external MCP
-  servers: [
-    { name: "filesystem", command: "npx", args: ["-y", "@modelcontextprotocol/server-filesystem"] },
-  ],
-});
-
-await omni.connect();
-
-// Your agent now has tools from all these apps
-const tools = await omni.getTools();
-```
+See the `servers/` folder and open an issue if you want to claim an app.
 
 ---
 
-## 🤝 Contributing
-
-We need help on two fronts:
-
-1. **Building new MCP servers** for apps that don't have one yet
-2. **Improving the gateway** (routing, auth, discovery)
-
-Ideas, issues and PRs are very welcome!
-
----
-
-## 📜 License
+## License
 
 MIT © 2026 zema-tech
 
 ---
 
-**OmniMCP = Composio, but open, MCP-native, and community-powered.**  
+**OmniMCP = Composio, but open, MCP-native, and community-owned.**  
 Every app deserves an MCP. Let's build them together.

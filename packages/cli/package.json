@@ -1,0 +1,10 @@
+{
+  "name": "@omnimcp/cli",
+  "version": "0.1.0",
+  "description": "OmniMCP CLI — search, link, execute tools from the terminal",
+  "type": "module",
+  "bin": {
+    "omnimcp": "./dist/index.js"
+  },
+  "license": "MIT"
+}
